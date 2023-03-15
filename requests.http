@@ -1,0 +1,15 @@
+
+### main
+GET http://localhost:8000
+Content-Type: application/json
+
+
+### all users
+
+GET http://localhost:8000/users
+Content-Type: application/json
+
+
+
+# make post request to http://localhost:8000/users with Content-Type: application/json
+
