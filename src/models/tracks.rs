@@ -1,11 +1,14 @@
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Track {
-    title: String,
-    artist: String,
-    album: String,
-    track_number: u32,
-    year: u32,
+    pub title: String,
+    pub artist: String,
+    pub album: String,
+    pub track_number: u32,
+    pub year: u32,
 }
 
 pub struct TrackList {
-    tracks: Vec<Track>,
+    pub tracks: Vec<Track>,
 }
