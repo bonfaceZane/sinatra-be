@@ -1,3 +1,7 @@
+mod db;
+mod models;
+mod routes;
+
 use axum::{
     http::StatusCode,
     routing::{get, post},
