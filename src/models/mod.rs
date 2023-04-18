@@ -1,2 +1,3 @@
-mod tracks;
 mod collections;
+mod playlist;
+mod tracks;
