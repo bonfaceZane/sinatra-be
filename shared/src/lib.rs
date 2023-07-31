@@ -1,6 +1,8 @@
+mod models;
+
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Serialize, Debug)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Post {
     title: String,
     body: String,
