@@ -1,3 +1,7 @@
+use shared::Post;
+
 fn main() {
-    println!("Hello, world!");
+    let new_post = Post::new("Global warming".to_owned(), "New body".to_owned());
+
+    dbg!(new_post)
 }
