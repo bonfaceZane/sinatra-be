@@ -5,6 +5,9 @@ version = 3
 [[package]]
 name = "image_api"
 version = "0.1.0"
+dependencies = [
+ "serde",
+]
 
 [[package]]
 name = "proc-macro2"
@@ -55,6 +58,7 @@ dependencies = [
 name = "site_api"
 version = "0.1.0"
 dependencies = [
+ "image_api",
  "shared",
 ]
 
