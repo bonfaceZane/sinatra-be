@@ -4,5 +4,6 @@
 members = [
 	"image_api",
 	"backend",
-	"shared"
+	"shared",
+	"review_service"
 ]
