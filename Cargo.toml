@@ -3,6 +3,6 @@
 
 members = [
 	"image_api",
-	"site_api",
+	"backend",
 	"shared"
 ]
