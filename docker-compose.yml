@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+    db:
+        image: surrealdb/surrealdb:latest
+        container_name: surrealdb
+        restart: always
+        command: start --user sinatra --pass pass file:/data/database.db
+        ports:
+            - "8000:8000"
+        environment:
+            - POSTGRES_PASSWORD=sinatra
+        volumes:
+            - ./data:/data
+        networks:
+            - backend
+
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - "8080:8080"
+        volumes:
+            - .:/app
+        depends_on:
+            - db
+        networks:
+            - backend
+
+networks:
+    backend:
+
+volumes:
+    db_data:

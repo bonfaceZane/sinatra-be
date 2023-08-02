@@ -1,5 +1,5 @@
 [package]
-name = "site_api"
+name = "backend"
 version = "0.1.0"
 edition = "2021"
 
@@ -8,3 +8,7 @@ edition = "2021"
 [dependencies]
 shared = { path = "../shared" }
 image_api = { path = "../image_api" }
+axum = "0.6.19"
+tokio = { version = "1", features = ["full"] }
+mongodb = "2.6.0"
+
