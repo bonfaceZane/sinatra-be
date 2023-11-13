@@ -2,8 +2,8 @@
 [workspace]
 
 members = [
-	"image_api",
+#	"image_api",
 	"backend",
-	"shared",
-	"review_service"
+#	"shared",
+#	"review_service"
 ]

@@ -1,15 +1,9 @@
-use axum::routing::{get, post};
-use axum::{
-    async_trait, extract,
-    handler::{get, post},
-    http::StatusCode,
-    AddExtensionLayer, Router,
-};
+use axum::http::StatusCode;
+use axum::routing::get;
+use axum::{extract, Extension, Router};
 use std::collections::HashMap;
-use std::sync::RwLock;
 use tokio::sync::RwLock;
 
-// Assume SurealDB is some database with custom methods, but we'll use a simple HashMap as a stand-in
 type Database = RwLock<HashMap<String, String>>;
 
 #[derive(Debug, Clone)]
@@ -52,26 +46,11 @@ async fn main() {
     let state = State::new();
 
     let app = Router::new()
-        .route("/data/:key", get(get_data_from_surealdb))
-        .route("/data", post(insert_data_into_surealdb))
-        .layer(AddExtensionLayer::new(state));
+        .route("/", get(|| async { "Hello, World!" }))
+        .layer(Extension(state));
 
     axum::Server::bind(&"0.0.0.0:3000".parse().unwrap())
         .serve(app.into_make_service())
         .await
         .unwrap();
 }
-
-// use axum::{routing::get, Router};
-//
-// #[tokio::main]
-// async fn main() {
-//     // build our application with a single route
-//     let app = Router::new().route("/", get(|| async { "Hello, World!" }));
-//
-//     // run it with hyper on localhost:3000
-//     axum::Server::bind(&"0.0.0.0:5000".parse().unwrap())
-//         .serve(app.into_make_service())
-//         .await
-//         .unwrap();
-// }
