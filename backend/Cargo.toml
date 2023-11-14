@@ -11,6 +11,8 @@ image_api = { path = "../image_api" }
 axum = "0.6.20"
 tokio = { version = "1", features = ["full", "macros"] }
 mongodb = { version = "2.7.1",features = ["default"] }
-tower-http = { version = "0.4.4", features = ["cors"] }
+tower-http = { version = "0", features = ["cors", "trace"] }
 dotenv = "0"
+tracing = "0"
+tracing-subscriber = { version = "0", features = ["env-filter"]}
 

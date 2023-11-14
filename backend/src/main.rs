@@ -1,39 +1,39 @@
 mod db;
 mod router;
-mod tracks;
 
-use crate::{
-    db::State,
-    tracks::{
-        get_data_from_mongodb,
-        insert_data_into_mongodb,
-    },
-};
+use crate::db::State;
 use axum::{
     http,
     http::{
         HeaderValue,
         Method,
     },
-    routing::{
-        get,
-        post,
-    },
+    routing::get,
     Extension,
     Router,
 };
 use dotenv::dotenv;
-use tower_http::cors::CorsLayer;
+use std::net::SocketAddr;
+use tower_http::{
+    cors::CorsLayer,
+    trace::TraceLayer,
+};
 
 #[tokio::main]
 async fn main() {
     dotenv().ok();
 
+    tracing_subscriber::fmt()
+        .with_target(false)
+        .compact()
+        .init();
+
     let state = State::new().await.unwrap();
 
     let app = Router::new()
-        .route("/track/:key", get(get_data_from_mongodb))
-        .route("/track", post(insert_data_into_mongodb))
+        // .route("/track/:key", get(get_data_from_mongodb))
+        // .route("/track", post(insert_data_into_mongodb))
+        .route("/", get(root))
         .layer(Extension(state))
         .layer(
             CorsLayer::new()
@@ -42,10 +42,19 @@ async fn main() {
                 )
                 .allow_headers([http::header::CONTENT_TYPE])
                 .allow_methods([Method::GET, Method::POST, Method::DELETE]),
-        );
+        )
+        .layer(TraceLayer::new_for_http());
 
-    axum::Server::bind(&"0.0.0.0:8080".parse().unwrap())
+    let port_address = SocketAddr::from(([127, 0, 0, 1], 8000));
+
+    tracing::info!("listening on {}", port_address);
+
+    axum::Server::bind(&port_address)
         .serve(app.into_make_service())
         .await
         .unwrap();
+}
+
+async fn root() -> &'static str {
+    "Hello, World!"
 }
