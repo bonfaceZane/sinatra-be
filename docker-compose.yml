@@ -1,7 +1,10 @@
 version: '3'
 
+
 services:
     db:
+        image: mongodb
+    sr:
         image: surrealdb/surrealdb:latest
         container_name: surrealdb
         restart: always

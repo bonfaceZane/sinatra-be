@@ -1,23 +1,28 @@
 mod db;
-mod router;
 
-use crate::db::State;
+use crate::db::AppState;
 use axum::{
-    http,
     http::{
+        header,
         HeaderValue,
         Method,
     },
     routing::get,
     Extension,
+    Json,
     Router,
 };
 use dotenv::dotenv;
+use serde::{
+    Deserialize,
+    Serialize,
+};
 use std::net::SocketAddr;
 use tower_http::{
     cors::CorsLayer,
     trace::TraceLayer,
 };
+use tracing::info;
 
 #[tokio::main]
 async fn main() {
@@ -28,11 +33,9 @@ async fn main() {
         .compact()
         .init();
 
-    let state = State::new().await.unwrap();
+    let state = AppState::new().await.unwrap();
 
     let app = Router::new()
-        // .route("/track/:key", get(get_data_from_mongodb))
-        // .route("/track", post(insert_data_into_mongodb))
         .route("/", get(root))
         .layer(Extension(state))
         .layer(
@@ -40,14 +43,14 @@ async fn main() {
                 .allow_origin(
                     "http://localhost:8081".parse::<HeaderValue>().unwrap(),
                 )
-                .allow_headers([http::header::CONTENT_TYPE])
+                .allow_headers([header::CONTENT_TYPE])
                 .allow_methods([Method::GET, Method::POST, Method::DELETE]),
         )
         .layer(TraceLayer::new_for_http());
 
-    let port_address = SocketAddr::from(([127, 0, 0, 1], 8000));
+    let port_address = SocketAddr::from(([127, 0, 0, 1], 8080));
 
-    tracing::info!("listening on {}", port_address);
+    info!("Listening on {port_address}");
 
     axum::Server::bind(&port_address)
         .serve(app.into_make_service())
@@ -55,6 +58,15 @@ async fn main() {
         .unwrap();
 }
 
-async fn root() -> &'static str {
-    "Hello, World!"
+#[derive(Deserialize, Serialize)]
+struct User {
+    name: String,
+}
+
+async fn root() -> Json<User> {
+    info!("Running home page");
+
+    Json(User {
+        name: "Bonface Zane".to_string(),
+    })
 }

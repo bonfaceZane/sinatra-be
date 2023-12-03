@@ -127,6 +127,7 @@ dependencies = [
  "dotenv",
  "image_api",
  "mongodb",
+ "serde",
  "shared",
  "tokio",
  "tower-http",
