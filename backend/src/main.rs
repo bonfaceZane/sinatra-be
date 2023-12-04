@@ -27,13 +27,14 @@ use tracing::info;
 #[tokio::main]
 async fn main() {
     dotenv().ok();
+    dotenv::from_filename(".env").ok();
 
     tracing_subscriber::fmt()
         .with_target(false)
         .compact()
         .init();
 
-    let state = AppState::new().await.unwrap();
+    let state = AppState::new("sinatra").await.unwrap();
 
     let app = Router::new()
         .route("/", get(root))
@@ -50,7 +51,10 @@ async fn main() {
 
     let port_address = SocketAddr::from(([127, 0, 0, 1], 8080));
 
+    println!("Pinged your deployment. You successfully connected to MongoDB!");
+
     info!("Listening on {port_address}");
+    dbg!(option_env!("DATABASE"));
 
     axum::Server::bind(&port_address)
         .serve(app.into_make_service())
@@ -61,6 +65,7 @@ async fn main() {
 #[derive(Deserialize, Serialize)]
 struct User {
     name: String,
+    height: f32,
 }
 
 async fn root() -> Json<User> {
@@ -68,5 +73,6 @@ async fn root() -> Json<User> {
 
     Json(User {
         name: "Bonface Zane".to_string(),
+        height: 1.2,
     })
 }

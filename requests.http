@@ -1,4 +1,8 @@
 
+
+GET {{uri}}/
+
+
 ### main
 GET {{uri}}
 Content-Type: application/json
