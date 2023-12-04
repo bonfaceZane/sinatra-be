@@ -17,7 +17,7 @@ trim_trailing_whitespace = true
 # Rust-specific settings (example: use 100 characters per line)
 max_line_length = 80
 
-[{*.yaml,*.yml}]
+[{*.yaml,*.yml,*.tf,*.tfstate,*.tfvars}]
 # YAML-specific settings (example: use 2 spaces for indentation)
 indent_style = space
 indent_size = 4

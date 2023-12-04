@@ -1,0 +1,8 @@
+public_key = "dfbgkqma"
+private_key = "7d424a9c-2cb9-4b34-b307-c397e1461806"
+cluster_region = "eu-west-1"
+atlas_provider_name = ""
+atlasprojectid = ""
+atlas_provider_instance_size_name = ""
+mongodb_atlas_database_username = ""
+mongodb_atlas_database_user_password = ""
