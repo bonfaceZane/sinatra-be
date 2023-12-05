@@ -2,11 +2,6 @@ mod db;
 
 use crate::db::AppState;
 use axum::{
-    http::{
-        header,
-        HeaderValue,
-        Method,
-    },
     routing::get,
     Extension,
     Json,
@@ -17,10 +12,9 @@ use serde::{
     Deserialize,
     Serialize,
 };
-use std::net::SocketAddr;
-use tower_http::{
-    cors::CorsLayer,
-    trace::TraceLayer,
+use std::{
+    env,
+    net::SocketAddr,
 };
 use tracing::info;
 
@@ -36,30 +30,27 @@ async fn main() {
 
     let state = AppState::new("sinatra").await.unwrap();
 
-    let app = Router::new()
-        .route("/", get(root))
-        .layer(Extension(state))
-        .layer(
-            CorsLayer::new()
-                .allow_origin(
-                    "http://localhost:8081".parse::<HeaderValue>().unwrap(),
-                )
-                .allow_headers([header::CONTENT_TYPE])
-                .allow_methods([Method::GET, Method::POST, Method::DELETE]),
-        )
-        .layer(TraceLayer::new_for_http());
+    let app = Router::new().route("/", get(root)).layer(Extension(state));
+    // .layer(TraceLayer::new_for_http());
 
     let port_address = SocketAddr::from(([127, 0, 0, 1], 8080));
 
     println!("Pinged your deployment. You successfully connected to MongoDB!");
 
     info!("Listening on {port_address}");
-    dbg!(option_env!("DATABASE"));
+    dbg!(env::var("DATABASE_URL").ok());
 
-    axum::Server::bind(&port_address)
-        .serve(app.into_make_service())
-        .await
-        .unwrap();
+    let database_url =
+        option_env!("DATABASE_URL").unwrap_or("default_database_url");
+
+    let key: Option<&'static str> = option_env!("DATABASE_URL");
+    println!("the secret key might be: {key:?}");
+
+    dbg!(database_url);
+
+    let listener = tokio::net::TcpListener::bind("0.0.0.0:8080").await.unwrap();
+
+    axum::serve(listener, app).await.unwrap();
 }
 
 #[derive(Deserialize, Serialize)]
