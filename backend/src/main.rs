@@ -12,10 +12,7 @@ use serde::{
     Deserialize,
     Serialize,
 };
-use std::{
-    env,
-    net::SocketAddr,
-};
+use std::net::SocketAddr;
 use tracing::info;
 
 #[tokio::main]
@@ -38,15 +35,6 @@ async fn main() {
     println!("Pinged your deployment. You successfully connected to MongoDB!");
 
     info!("Listening on {port_address}");
-    dbg!(env::var("DATABASE_URL").ok());
-
-    let database_url =
-        option_env!("DATABASE_URL").unwrap_or("default_database_url");
-
-    let key: Option<&'static str> = option_env!("DATABASE_URL");
-    println!("the secret key might be: {key:?}");
-
-    dbg!(database_url);
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:8080").await.unwrap();
 

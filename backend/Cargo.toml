@@ -10,10 +10,10 @@ shared = { path = "../shared" }
 image_api = { path = "../image_api" }
 axum = "0"
 tokio = { version = "1", features = ["full", "macros"] }
-mongodb = { version = "2.7.1",features = ["default"] }
+mongodb = { version = "2",features = ["default"] }
 tower-http = { version = "0", features = ["cors", "trace"] }
 dotenv = { version = "0"}
 tracing = "0"
 tracing-subscriber = { version = "0", features = ["env-filter"]}
-serde = { version = "1.0.188", features = ["derive"] }
+serde = { version = "1", features = ["derive"] }
 
