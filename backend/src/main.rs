@@ -2,6 +2,7 @@ mod db;
 
 use crate::db::AppState;
 use axum::{
+    extract::FromRef,
     routing::get,
     Extension,
     Json,
@@ -12,7 +13,10 @@ use serde::{
     Deserialize,
     Serialize,
 };
-use std::net::SocketAddr;
+use std::{
+    net::SocketAddr,
+    os::unix::net::SocketAddr,
+};
 use tracing::info;
 
 #[tokio::main]
@@ -24,8 +28,6 @@ async fn main() {
         .with_target(false)
         .compact()
         .init();
-
-    let state = AppState::new("sinatra").await.unwrap();
 
     let app = Router::new().route("/", get(root)).layer(Extension(state));
 

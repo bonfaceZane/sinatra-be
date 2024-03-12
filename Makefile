@@ -2,6 +2,10 @@
 #surrealDB
 surreal-backup:
 
+dev:
+	cargo run --bin=backend
+
+
 # kubernates
 pods:
 	kubectl get pod
